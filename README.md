@@ -8,6 +8,8 @@ Inspired by the "AIoT Project: Machine Learning and Sensor Networks" course guid
 
 The core idea is to capture the distinct way individuals interact with a series of capacitive touch sensors. By analyzing both the electrical capacitance change and the duration of touch on each sensor strip during a swipe, we can create a unique "fingerprint" for each user.
 
+![Schema of Project](images/schema.png)
+
 **Project Goals:**
 1.  Collect real-time capacitive touch data using ESP32.
 2.  Transmit this data to a BeagleBone Black (BBB) via Bluetooth.
