@@ -6,18 +6,18 @@
 *   [@turan1609](https://github.com/turan1609)
 *   [@rizakarakaya](https://github.com/rizakarakaya)
 
-An AIoT (Artificial Intelligence of Things) system designed to identify users based on their unique capacitive swipe patterns. This project leverages an ESP32 microcontroller for data acquisition, a BeagleBone Black for edge processing and machine learning inference, and an MQTT server for initial data aggregation, fulfilling the requirements of our "AIoT Project: Machine Learning and Sensor Networks" course.
+An AIoT (Artificial Intelligence of Things) system designed to identify users based on their unique capacitive swipe patterns. This project was developed as part of the **CSE432 - Internet of Things** course at **Adnan Menderes University**. It leverages an ESP32 microcontroller for data acquisition, a BeagleBone Black for edge processing and machine learning inference, and an MQTT server for initial data aggregation.
 
 ## 📜 Project Concept
 
-The core idea is to capture the distinct way individuals interact with a series of capacitive touch sensors. By analyzing both the electrical capacitance change and the duration of touch on each sensor strip during a swipe, we aim to create a unique "fingerprint" for each user. This data is then used to train a machine learning model for user identification.
+The core idea is to capture the distinct way individuals interact with a series of capacitive touch sensors. By analyzing both the electrical capacitance change and the duration of touch on each sensor strip during a swipe, we aim to create a unique "fingerprint" for each user. This data is then used to train a machine learning model for user identification, fulfilling the practical application goals of our AIoT coursework.
 
-![System Schema](images/schema.png) *(Assuming you have an image named schema.png in an 'images' folder)*
+![System Schema](images/schema.png)
 
 **Key Goals:**
 1.  Collect real-time capacitive touch and duration data using ESP32.
 2.  Transmit this data to a BeagleBone Black (BBB) via Bluetooth.
-3.  Initially, forward data from BBB to a central MQTT server for backup and instructor oversight.
+3.  Initially, forward data from BBB to a central MQTT server for backup and instructor oversight, as per course guidelines.
 4.  Train a supervised machine learning model on the collected dataset.
 5.  Deploy the trained model onto the BeagleBone Black for real-time, on-device inference.
 
@@ -39,9 +39,9 @@ The core idea is to capture the distinct way individuals interact with a series 
 2.  **Processing (BeagleBone Black):** Receives Bluetooth data. During collection, it relays to MQTT and saves locally. Post-deployment, it runs the ML model for prediction.
 3.  **Data Backup (MQTT - Initial Phase):** Instructor-managed server for secure data storage during collection.
 
-## 🚀 Our Learning Journey & Challenges
+## 🚀 Our Learning Journey & Challenges (CSE432 - Adnan Menderes University)
 
-This project was a significant learning experience, pushing us to integrate diverse hardware and software components.
+This project was a significant learning experience, pushing us to integrate diverse hardware and software components within the framework of our Internet of Things course.
 
 **Key Milestones & Technical Hurdles:**
 
@@ -60,7 +60,7 @@ This project was a significant learning experience, pushing us to integrate dive
         *   Implement TLS-secured communication with the instructor's **MQTT broker using `paho-mqtt`**, a new technology for many of us. This included managing CA certificates and credentials.
         *   Simultaneously **log data to a local CSV file** on the BBB, providing an essential local backup and a direct source for model training.
 
-4.  **New Technologies & Methods Encountered:**
+4.  **New Technologies & Methods Encountered (Learnings from CSE432):**
     *   **Embedded Linux (Debian on BBB):** Gained experience with system configuration, package management, and running Python scripts in a headless environment.
     *   **Bluetooth Serial Profile (SPP):** Learned the intricacies of setting up and using SPP for wireless data transfer between microcontrollers and single-board computers.
     *   **MQTT Protocol:** Understood the publish-subscribe model and its application in IoT for messaging, including security aspects like TLS.
@@ -109,8 +109,8 @@ This project was a significant learning experience, pushing us to integrate dive
 
 ## 🤝 Contributing
 
-For this course project, collaboration is within the team. For general inquiries or suggestions, feel free to open an issue.
+This project was developed by students of Adnan Menderes University for the CSE432 course. For general inquiries or suggestions related to the project, feel free to open an issue.
 
 ## 📝 License
 
-Educational Use Only.
+Educational Use Only - CSE432 Project, Adnan Menderes University.
