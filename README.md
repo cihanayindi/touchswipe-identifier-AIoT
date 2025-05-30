@@ -1,221 +1,116 @@
 # 👋 touchswipe-identifier: AIoT Capacitive Swipe User Identification
 
-An AIoT (Artificial Intelligence of Things) system designed to identify users based on their unique capacitive swipe patterns. This project leverages an ESP32 microcontroller for data acquisition, a BeagleBone Black for edge processing and machine learning inference, and an MQTT server for initial data aggregation.
+**Project Team:**
+*   [@cihanayindi](https://github.com/cihanayindi)
+*   [@keremtanil](https://github.com/keremtanil)
+*   [@turan1609](https://github.com/turan1609)
+*   [@rizakarakaya](https://github.com/rizakarakaya)
 
-## 📜 Project Overview
+An AIoT (Artificial Intelligence of Things) system designed to identify users based on their unique capacitive swipe patterns. This project was developed as part of the **CSE432 - Internet of Things** course at **Adnan Menderes University**. It leverages an ESP32 microcontroller for data acquisition, a BeagleBone Black for edge processing and machine learning inference, and an MQTT server for initial data aggregation.
 
-Inspired by the "AIoT Project: Machine Learning and Sensor Networks" course guidelines, this project aims to provide hands-on experience with AIoT technologies. We collect real-time sensor data, process it, train a machine learning model, and deploy it for user identification.
+## 📜 Project Concept
 
-The core idea is to capture the distinct way individuals interact with a series of capacitive touch sensors. By analyzing both the electrical capacitance change and the duration of touch on each sensor strip during a swipe, we can create a unique "fingerprint" for each user.
+The core idea is to capture the distinct way individuals interact with a series of capacitive touch sensors. By analyzing both the electrical capacitance change and the duration of touch on each sensor strip during a swipe, we aim to create a unique "fingerprint" for each user. This data is then used to train a machine learning model for user identification, fulfilling the practical application goals of our AIoT coursework.
 
-**Project Goals:**
-1.  Collect real-time capacitive touch data using ESP32.
+![System Schema](images/schema.png)
+
+**Key Goals:**
+1.  Collect real-time capacitive touch and duration data using ESP32.
 2.  Transmit this data to a BeagleBone Black (BBB) via Bluetooth.
-3.  Initially, forward data from BBB to a central MQTT server (for backup and instructor oversight, as per course requirements).
+3.  Initially, forward data from BBB to a central MQTT server for backup and instructor oversight, as per course guidelines.
 4.  Train a supervised machine learning model on the collected dataset.
-5.  Deploy the trained model onto the BeagleBone Black.
-6.  Transition to a system where the BBB performs real-time user identification based on live ESP32 data, without relying on the MQTT server for the prediction step.
+5.  Deploy the trained model onto the BeagleBone Black for real-time, on-device inference.
 
-## ✨ Key Features
+## ✨ System Highlights
 
-*   **Capacitive Sensing:** Utilizes 9 copper tape strips connected to ESP32 touch pins.
-*   **Dual-Feature Data:** Captures both raw capacitive touch values and the duration of touch on each strip.
-*   **Wireless Communication:** ESP32 transmits data to BeagleBone Black via Bluetooth.
-*   **Edge ML Deployment:** BeagleBone Black hosts the trained machine learning model for local inference.
+*   **Capacitive Sensing:** 9 copper tape strips connected to ESP32 touch pins.
+*   **Dual-Feature Data:** Captures raw capacitive values and touch duration for each strip.
+*   **Wireless Communication:** ESP32 to BeagleBone Black via Bluetooth.
+*   **Edge ML Deployment:** BeagleBone Black hosts the ML model for local inference.
 *   **Phased Data Flow:**
-    *   **Phase 1 (Data Collection):** ESP32 → Bluetooth → BBB → MQTT Server → Local CSV Backup on BBB.
-    *   **Phase 2 (Inference):** ESP32 → Bluetooth → BBB (ML Model) → User Prediction.
-*   **User Interface:**
-    *   Two physical buttons on ESP32 setup for managing data collection: one for new trial (same user), one for new user.
-    *   RGB LED for visual feedback (touch detection, button presses, system states).
-*   **Data Integrity:** Real-world sensor data collection, adhering to project guidelines against synthetic data.
+    *   **Collection:** ESP32 → Bluetooth → BBB → MQTT Server & Local CSV Backup.
+    *   **Inference:** ESP32 → Bluetooth → BBB (ML Model) → User Prediction.
+*   **Interactive Data Labeling:** Physical buttons on ESP32 for user/trial management.
+*   **Visual Feedback:** RGB LED for system status and user interaction.
 
-## ⚙️ System Architecture
+## ⚙️ System Architecture Simplified
 
-The system is composed of three main tiers:
+1.  **Sensing (ESP32):** Reads 9 copper tapes, calculates touch duration, formats data as CSV, and sends via Bluetooth. Includes buttons and LED for interaction.
+2.  **Processing (BeagleBone Black):** Receives Bluetooth data. During collection, it relays to MQTT and saves locally. Post-deployment, it runs the ML model for prediction.
+3.  **Data Backup (MQTT - Initial Phase):** Instructor-managed server for secure data storage during collection.
 
-1.  **Sensing & Acquisition (ESP32):**
-    *   An ESP32 microcontroller is connected to 9 copper tape strips acting as capacitive touch sensors.
-    *   It reads the raw touch values and calculates the duration of each touch.
-    *   User/trial management is handled via push-buttons.
-    *   An RGB LED provides status feedback.
-    *   Data is formatted as a CSV string and sent via Bluetooth.
+## 🚀 Our Learning Journey & Challenges (CSE432 - Adnan Menderes University)
 
-2.  **Processing & Inference (BeagleBone Black):**
-    *   The BBB acts as a gateway and edge ML processor.
-    *   It receives data from the ESP32 via a Bluetooth serial connection (`rfcomm`).
-    *   **During data collection:** It forwards the received data to the instructor-managed MQTT server and also saves it locally to a `veriseti.csv` file.
-    *   **After model deployment:** It will receive data, preprocess it if necessary, feed it to the onboard ML model, and output a user prediction.
+This project was a significant learning experience, pushing us to integrate diverse hardware and software components within the framework of our Internet of Things course.
 
-3.  **Data Aggregation & Backup (MQTT Server - Initial Phase):**
-    *   An instructor-provided MQTT server is used during the data collection phase.
-    *   This ensures data is backed up and allows the instructor to monitor data collection progress.
-    *   Access is secured via TLS and username/password authentication.
+**Key Milestones & Technical Hurdles:**
 
-## 🔧 How It Works
+1.  **Hardware Prototyping & Assembly:**
+    *   **ESP32 Capacitive Touch:** Started with a single copper tape to validate ESP32's touchRead functionality, then successfully scaled to 9 tapes. This involved careful wiring and soldering to ensure reliable connections.
+    *   **Physical Interface:** Designed and built a user-friendly interface on a breadboard with buttons for data labeling (user/trial) and an RGB LED for intuitive feedback, which required iterating on the ESP32 code for responsiveness.
 
-**Data Flow:**
-`Copper Tapes` → `ESP32` (reads touch values & duration) → `Bluetooth` → `BeagleBone Black` →
-    1.  **(Data Collection Phase):** `Local CSV Storage` & `MQTT Server`
-    2.  **(Prediction Phase):** `ML Model on BBB` → `Predicted User`
+2.  **BeagleBone Black Integration:**
+    *   **Initial Connectivity Issues:** A major early challenge was getting the BeagleBone Black connected to the internet. We overcame this by **installing a fresh Debian 12 OS**, which provided better driver support and network configuration tools. This was a valuable lesson in troubleshooting embedded Linux systems.
+    *   **Bluetooth Communication:** Establishing a stable Bluetooth serial connection between the ESP32 and BBB (`rfcomm`) required understanding Linux Bluetooth utilities (`bluetoothctl`, `rfcomm bind`) and Python's `pyserial` library. Debugging this link involved checking MAC addresses, RFCOMM channels, and ensuring services were running correctly on the BBB.
 
-**User Interaction:**
-*   A user performs a swipe gesture (e.g., left-to-right) across the 9 copper tapes.
-*   The ESP32 records the sequence of touch values and the time spent on each tape.
-*   This generates a feature vector of 18 values (9 touch readings + 9 duration readings) per swipe instance, plus user/trial ID and timestamp.
-*   Buttons allow for labeling data for different users and different trials for the same user.
+3.  **Data Pipeline & MQTT:**
+    *   **ESP32 to BBB Data Stream:** We developed robust ESP32 code to consistently format sensor readings and timing data into CSV strings for Bluetooth transmission.
+    *   **BBB Data Handling:** The Python script on the BBB was engineered to:
+        *   Reliably parse incoming Bluetooth data.
+        *   Implement TLS-secured communication with the instructor's **MQTT broker using `paho-mqtt`**, a new technology for many of us. This included managing CA certificates and credentials.
+        *   Simultaneously **log data to a local CSV file** on the BBB, providing an essential local backup and a direct source for model training.
+
+4.  **New Technologies & Methods Encountered (Learnings from CSE432):**
+    *   **Embedded Linux (Debian on BBB):** Gained experience with system configuration, package management, and running Python scripts in a headless environment.
+    *   **Bluetooth Serial Profile (SPP):** Learned the intricacies of setting up and using SPP for wireless data transfer between microcontrollers and single-board computers.
+    *   **MQTT Protocol:** Understood the publish-subscribe model and its application in IoT for messaging, including security aspects like TLS.
+    *   **Edge Computing Concepts:** Applied the principle of processing data closer to the source by planning to deploy the ML model directly on the BBB.
+    *   **Systematic Data Collection:** Developed a process for labeled data acquisition using the physical button interface, crucial for supervised machine learning.
+
+**Current Stage & Next Steps:**
+*   Actively collecting and labeling swipe data.
+*   **Upcoming:** Data preprocessing, ML model training and evaluation, deployment on BBB, and end-to-end system testing.
 
 ## 🧠 Machine Learning Aspect
 
-*   **Dataset:** The dataset consists of time-series data from the 9 capacitive sensors. Each row includes:
-    *   `User_TrialID` (e.g., User0.0, User0.1, User1.0)
-    *   `Timestamp`
-    *   `rawT9, rawT8, ..., rawT0` (Raw capacitive values for 9 sensors)
-    *   `ongoingDurT9, ongoingDurT8, ..., ongoingDurT0` (Duration of touch on each of the 9 sensors)
-*   **Features:** 18 primary features (9 raw values + 9 duration values).
-*   **Task:** Supervised multi-class classification. The model will be trained to predict the `UserID` based on the 18 input features.
-*   **Why ML is needed:** A simple rule-based or threshold system would likely fail to capture the complex, dynamic, and combined patterns of electrical values and swipe speeds that uniquely characterize an individual's touch. ML models can learn these nuanced patterns.
-*   **Potential Models:** Logistic Regression, Decision Trees, Random Forest, KNN, SVM, or even simple Neural Networks could be explored.
-
-## 🚀 Our Development Journey & Milestones
-
-1.  **Initial Setup & Prototyping:**
-    *   Acquired BeagleBone Black from instructor. Faced initial challenges connecting it to the internet.
-    *   Ordered ESP32. Upon arrival, successfully tested capacitive touch reading with a single copper tape.
-    *   Scaled up to 9 copper tapes, confirming data acquisition capabilities.
-2.  **Hardware Assembly:**
-    *   Mounted the ESP32 onto a cardboard base.
-    *   Affixed 9 copper tape strips to the cardboard.
-    *   Soldered jumper wires between the ESP32 touch pins and the copper tapes.
-    *   Integrated a breadboard onto the assembly, adding:
-        *   Two push-buttons: one for advancing trial ID (same user), one for advancing user ID.
-        *   An RGB LED module for visual feedback (e.g., green blink on touch, button-specific colors).
-3.  **Software & Connectivity - ESP32:**
-    *   Developed ESP32 firmware to:
-        *   Read all 9 touch sensors and calculate touch durations.
-        *   Manage user and trial IDs based on button inputs.
-        *   Provide LED feedback.
-        *   Format data as CSV strings.
-        *   Transmit data to the BeagleBone Black via Bluetooth serial.
-4.  **Software & Connectivity - BeagleBone Black:**
-    *   **Resolved Internet Issue:** Installed Debian 12 on the BBB, which resolved the network connectivity problems.
-    *   Developed Python script to:
-        *   Establish a Bluetooth serial connection (`/dev/rfcomm0`) to receive data from the ESP32.
-        *   Parse the incoming CSV data.
-        *   **Forward data to the instructor's MQTT server.**
-        *   **Simultaneously save the data locally to `veriseti.csv` on the BBB.**
-5.  **Current Stage & Next Steps:**
-    *   Actively collecting swipe data from multiple users.
-    *   **Next:**
-        *   Gather a sufficient and diverse dataset (minimum 2 weeks as per guidelines).
-        *   Preprocess and clean the collected data.
-        *   Train various machine learning models.
-        *   Evaluate models and select the best performer.
-        *   Deploy the chosen model onto the BeagleBone Black.
-        *   Test the end-to-end real-time prediction system.
+*   **Dataset:** Time-series data from 9 capacitive sensors (18 features: 9 raw values + 9 durations), labeled with User ID.
+*   **Task:** Supervised multi-class classification to predict User ID.
+*   **Why ML?** Swipe patterns are nuanced; simple thresholds are insufficient. ML can learn these complex, individual-specific patterns.
+*   **Potential Models:** Exploring Logistic Regression, Decision Trees, Random Forest, KNN, SVM.
 
 ## 🛠️ Tech Stack
 
-*   **Microcontroller:** ESP32 (WROOM32 or similar)
-    *   Programming: C/C++ (Arduino Framework)
-    *   Key Libraries: `BluetoothSerial.h`
-*   **Edge Computer:** BeagleBone Black
-    *   OS: Debian 12
-    *   Programming: Python 3
-    *   Key Libraries: `paho-mqtt` (for MQTT communication), `pyserial` (for Bluetooth serial)
-*   **Sensors:** 9x Copper Tape Strips (as capacitive touch pads)
-*   **Communication Protocols:**
-    *   Bluetooth (ESP32 ↔ BBB)
-    *   MQTT (BBB → MQTT Server) over TLS
-*   **Machine Learning (Planned):**
-    *   Python
-    *   Libraries: Scikit-learn, Pandas, NumPy (or other relevant ML/data processing libraries)
-*   **Cloud/Remote Service:** EMQ XSL MQTT Broker (instructor-provided)
+*   **Microcontroller:** ESP32 (C++/Arduino, `BluetoothSerial.h`)
+*   **Edge Computer:** BeagleBone Black (Debian 12, Python 3, `paho-mqtt`, `pyserial`)
+*   **Sensors:** 9x Copper Tape Strips
+*   **Communication:** Bluetooth (ESP32-BBB), MQTT over TLS (BBB-Server)
+*   **ML (Planned):** Python, Scikit-learn, Pandas, NumPy
 
-## 🔧 Setup & Installation
+## 🔧 Setup & Usage Summary
 
 **1. ESP32:**
-   *   Install Arduino IDE or PlatformIO.
-   *   Install the ESP32 board definitions.
-   *   Ensure necessary libraries (like `BluetoothSerial.h`) are available.
-   *   Wire the copper tapes to the defined touch pins (T0, T2-T9).
-   *   Wire buttons and RGB LED to respective GPIO pins.
-   *   Upload the `esp32_touch_sender.ino` (or your equivalent C++ code) to the ESP32.
-   *   Note the Bluetooth device name configured in the ESP32 code (e.g., "ESP32_TouchData").
+   *   Wire sensors, buttons, LED. Upload firmware. Note Bluetooth name.
 
 **2. BeagleBone Black:**
-   *   Ensure Debian 12 (or a compatible Linux distribution) is running.
-   *   Install Python 3 and pip.
-   *   Install required Python libraries:
-     ```bash
-     pip install paho-mqtt pyserial
-     ```
-   *   **Bluetooth Pairing & Binding:**
-      1.  Scan for Bluetooth devices: `hcitool scan` (or `bluetoothctl scan on`). Identify your ESP32.
-      2.  Pair with the ESP32 using `bluetoothctl`.
-      3.  Bind the ESP32's MAC address to a serial port (e.g., `/dev/rfcomm0`):
-          ```bash
-          sudo rfcomm bind 0 XX:XX:XX:XX:XX:XX 1 
-          # Replace XX:XX:XX:XX:XX:XX with your ESP32's MAC address
-          # The '1' is the RFCOMM channel, typically 1 for SPP.
-          ```
-          You might need to install `bluez-tools` or `rfcomm` if not present.
-   *   Place the CA certificate (`emqxsl-ca.crt`) in the specified path (e.g., `/home/debian/emqxsl-ca.crt`).
-   *   Configure MQTT broker details, serial port, and CSV file path in the `bbb_mqtt_bluetooth_logger.py` script.
+   *   Install Debian, Python, `paho-mqtt`, `pyserial`.
+   *   Pair/bind ESP32 Bluetooth to `/dev/rfcomm0`.
+   *   Configure and place CA certificate.
 
-**3. MQTT Broker:**
-   *   Ensure you have the correct broker address, port, username, password, and CA certificate from your instructor.
+**3. Running the System (Data Collection):**
+   *   Power ESP32.
+   *   On BBB, run the Python data logging script.
+   *   Use ESP32 buttons to label user/trial, then swipe. Data flows to BBB (local CSV & MQTT).
 
-## ▶️ Usage
+## 🔮 Future Enhancements
 
-1.  **Power on the ESP32.** It will start broadcasting as a Bluetooth device.
-2.  **On the BeagleBone Black:**
-    *   Ensure Bluetooth is enabled and the ESP32 is paired and bound to `/dev/rfcomm0` (or the configured port).
-    *   Run the Python script:
-        ```bash
-        python3 bbb_mqtt_bluetooth_logger.py
-        ```
-    *   The script will attempt to connect to the ESP32 via Bluetooth and to the MQTT broker.
-3.  **Data Collection:**
-    *   Use the "New Trial" button on the ESP32 setup to record multiple swipes for the current user.
-    *   Use the "New User" button to switch to a new user ID for data labeling.
-    *   Perform swipe gestures across the copper tapes.
-    *   The ESP32 will send data to the BBB.
-    *   The BBB will print received data to its console, save it to the local CSV file (`veriseti.csv`), and publish it to the MQTT topic.
-4.  **(Future - Post Model Deployment):** The BBB script will be updated to load the ML model and perform predictions instead of (or in addition to) MQTT forwarding.
-
-## 📁 Folder Structure (Example)
-
-touchswipe-identifier/
-├── esp32_code/ # Arduino sketch for ESP32
-│ └── esp32_touch_sender.ino
-├── bbb_code/ # Python script for BeagleBone Black
-│ └── bbb_mqtt_bluetooth_logger.py
-│ └── emqxsl-ca.crt # MQTT Broker CA Certificate
-├── dataset/ # Where collected data might be stored or analyzed
-│ └── veriseti.csv # (This is created on the BBB, example location)
-├── ml_model/ # Jupyter notebooks, model files (e.g., .pkl)
-│ └── training_notebook.ipynb
-│ └── swipe_model.pkl
-├── docs/ # Project documentation, diagrams
-│ └── AloT_Project_Info.pdf
-│ └── system_diagram.png
-└── README.md # This file
-
-
-## 🔮 Future Work & Potential Improvements
-
-*   **Advanced ML Models:** Experiment with more complex models like LSTMs or GRUs if sequential nature is highly critical and simpler models don't suffice.
-*   **Real-time Dashboard:** Develop a simple web interface hosted on the BBB to display live predictions.
-*   **Gesture Expansion:** Extend the system to recognize more complex gestures beyond simple swipes.
-*   **Model Optimization:** Quantize or prune the ML model for even better performance on the BBB.
-*   **Robustness:** Implement more error handling and reconnection logic in both ESP32 and BBB code.
-*   **Security Enhancements:** If deploying in a less controlled environment, further secure the Bluetooth communication.
+*   Explore more advanced ML models (e.g., LSTMs for sequence data).
+*   Develop a simple web dashboard on BBB for live predictions.
+*   Optimize the ML model for edge performance (quantization/pruning).
 
 ## 🤝 Contributing
 
-Details on how to contribute if this were a larger open-source project (e.g., fork, branch, pull request). For this course project, collaboration is within the team.
+This project was developed by students of Adnan Menderes University for the CSE432 course. For general inquiries or suggestions related to the project, feel free to open an issue.
 
 ## 📝 License
 
-Specify a license if applicable (e.g., MIT, Apache 2.0). For a course project, this might be "Educational Use Only" or similar.
+Educational Use Only - CSE432 Project, Adnan Menderes University.
