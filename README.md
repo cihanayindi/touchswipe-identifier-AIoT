@@ -1,5 +1,11 @@
 # 👋 touchswipe-identifier: AIoT Capacitive Swipe User Identification
 
+**Project Team:**
+*   [@cihanayindi](https://github.com/cihanayindi)
+*   [@keremtanil](https://github.com/keremtanil)
+*   [@turan1609](https://github.com/turan1609)
+*   [@rizakarakaya](https://github.com/rizakarakaya)
+
 An AIoT (Artificial Intelligence of Things) system designed to identify users based on their unique capacitive swipe patterns. This project leverages an ESP32 microcontroller for data acquisition, a BeagleBone Black for edge processing and machine learning inference, and an MQTT server for initial data aggregation.
 
 ## 📜 Project Overview
