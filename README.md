@@ -6,7 +6,7 @@
 *   [@turan1609](https://github.com/turan1609)
 *   [@rizakarakaya](https://github.com/rizakarakaya)
 *   [@ecekucuk](https://www.linkedin.com/in/ece-k%C3%BC%C3%A7%C3%BCk-04ab08263/)
-*   
+  
 An AIoT (Artificial Intelligence of Things) system designed to identify users based on their unique capacitive swipe patterns. This project was developed as part of the **CSE432 - Internet of Things** course at **Adnan Menderes University**. It leverages an ESP32 microcontroller for data acquisition, a BeagleBone Black for edge processing and machine learning inference, and an MQTT server for initial data aggregation.
 
 ## 📜 Project Concept
